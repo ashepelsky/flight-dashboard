@@ -14,11 +14,15 @@ import com.ashep.flight.model.FlightInfoDto;
 import com.ashep.flight.model.FlightScheduleRow;
 import com.ashep.flight.service.FlightManagerService;
 import com.ashep.flight.service.FlightStorage;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+@Service
 public class FlightManagerServiceImpl implements FlightManagerService {
 
     private final FlightStorage storage;
 
+    @Autowired
     public FlightManagerServiceImpl(final FlightStorage storage) {
 
         this.storage = storage;

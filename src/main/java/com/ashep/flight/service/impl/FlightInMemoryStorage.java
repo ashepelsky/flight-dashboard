@@ -8,7 +8,9 @@ import java.util.SortedMap;
 
 import com.ashep.flight.model.FlightInfoDto;
 import com.ashep.flight.service.FlightStorage;
+import org.springframework.stereotype.Service;
 
+@Service
 public class FlightInMemoryStorage implements FlightStorage {
 
     private Map<DayOfWeek, SortedMap<LocalTime, FlightInfoDto>> flightsStorage = new HashMap<>();

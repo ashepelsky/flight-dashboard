@@ -14,7 +14,9 @@ import java.util.logging.Logger;
 
 import com.ashep.flight.model.FlightScheduleRow;
 import com.ashep.flight.service.FlightScheduleParserService;
+import org.springframework.stereotype.Service;
 
+@Service
 public class FlightScheduleCsvParser implements FlightScheduleParserService {
 
     @Override
