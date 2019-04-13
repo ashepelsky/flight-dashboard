@@ -59,8 +59,8 @@ public class FlightInMemoryStorageTest {
         assertEquals(DEPARTURE_TIME, flightInfoDto.getDepartureTime());
         assertEquals(DESTINATION, flightInfoDto.getDestination());
         assertEquals(AIRPORT, flightInfoDto.getDestinationAirport());
-        assertEquals(FLIGHT_NO, flightInfoDto.getFlightNo());
-        assertEquals(FlightStatusEnum.ON_TIME, flightInfoDto.getStatus());
+        assertEquals("no 0", flightInfoDto.getFlightNo());
+        assertEquals(FlightStatusEnum.DEPARTED, flightInfoDto.getStatus());
 
     }
 

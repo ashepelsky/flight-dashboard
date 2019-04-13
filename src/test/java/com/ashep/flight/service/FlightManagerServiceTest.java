@@ -71,7 +71,7 @@ public class FlightManagerServiceTest {
         assertEquals(DESTINATION, result.getDestination());
         assertEquals(AIRPORT, result.getDestinationAirport());
         assertEquals(FLIGHT_NO, result.getFlightNo());
-        assertEquals(FlightStatusEnum.ON_TIME, result.getStatus());
+        assertEquals(FlightStatusEnum.DEPARTED, result.getStatus());
 
         verify(storage, times(1)).saveFlights(anyMap());
 

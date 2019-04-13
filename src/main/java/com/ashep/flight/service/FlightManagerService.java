@@ -18,7 +18,17 @@ public interface FlightManagerService {
 
     default List<FlightInfoDto> getClosestFlights() {
 
-        return getFlights(LocalTime.now().minusHours(2), LocalTime.now().plusHours(3), LocalDate.now().getDayOfWeek());
+        LocalTime start;
+        LocalTime end;
+
+        LocalTime now = LocalTime.now();
+
+        final int hour = now.getHour();
+
+        end = hour > 20 ? LocalTime.MAX : now.plusHours(3);
+        start = hour < 3 ? LocalTime.MIN : now.minusHours(3);
+
+        return getFlights(start, end, LocalDate.now().getDayOfWeek());
     }
 
 }

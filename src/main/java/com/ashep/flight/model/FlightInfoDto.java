@@ -1,6 +1,7 @@
 package com.ashep.flight.model;
 
 import java.time.LocalTime;
+
 import lombok.Getter;
 
 @Getter
@@ -26,5 +27,13 @@ public class FlightInfoDto {
         this.destinationAirport = destinationAirport;
         this.flightNo = flightNo;
         status = FlightStatusEnum.getStatusFromTime(departureTime);
+    }
+
+    public static FlightInfoDto fromRow(FlightScheduleRow flightScheduleRow) {
+
+        return new FlightInfoDto(flightScheduleRow.getDepartureTime(),
+                                 flightScheduleRow.getDestination(),
+                                 flightScheduleRow.getDestinationAirport(),
+                                 flightScheduleRow.getFlightNo());
     }
 }
