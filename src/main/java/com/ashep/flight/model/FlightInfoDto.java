@@ -1,8 +1,6 @@
 package com.ashep.flight.model;
 
 import java.time.LocalTime;
-
-import com.sun.org.apache.xpath.internal.operations.String;
 import lombok.Getter;
 
 @Getter
