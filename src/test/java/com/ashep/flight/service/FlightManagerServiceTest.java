@@ -100,7 +100,7 @@ public class FlightManagerServiceTest {
         when(storage.getFlights()).thenReturn(getScheduleMap());
 
         final List<FlightInfoDto> result = flightManagerService.getFlights(DEPARTURE_TIME.minusHours(1),
-                                                                            DEPARTURE_TIME.plusHours(1),
+                                                                            DEPARTURE_TIME.plusHours(1).plusMinutes(1),
                                                                             DayOfWeek.MONDAY);
 
         assertNotNull("Schedule map can not be null", result);

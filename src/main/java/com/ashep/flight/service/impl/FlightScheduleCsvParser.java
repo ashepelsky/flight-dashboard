@@ -38,7 +38,8 @@ public class FlightScheduleCsvParser implements FlightScheduleParserService {
             }
 
         } catch (IOException e) {
-
+            Logger.getLogger(this.getClass().getSimpleName())
+                  .severe("IO exception while parsing CVS file. error: " + e.getMessage());
             throw new RuntimeException(e);
         } catch (Exception e) {
             Logger.getLogger(this.getClass().getSimpleName())
