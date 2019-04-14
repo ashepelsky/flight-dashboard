@@ -41,7 +41,7 @@ public class FlightController {
         this.parserService = parserService;
     }
 
-    @GetMapping(produces = MediaType.APPLICATION_STREAM_JSON_VALUE)
+    @GetMapping
     public Flux<List<FlightInfoDto>> test() {
 
         Flux<Long> interval = Flux.interval(Duration.ofSeconds(1));

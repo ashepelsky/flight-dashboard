@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h1>Flighs Dashboard</h1>
+<div id="result"></div>
+
+<script>
+    if(typeof(EventSource) !== "undefined") {
+        var source = new EventSource("flight");
+        source.onmessage = function(event) {
+            document.getElementById("result").innerHTML = event.data + "<br>";
+        };
+    } else {
+        document.getElementById("result").innerHTML = "Sorry, your browser does not support server-sent events...";
+    }
+
+    source.onopen = function(event) {
+        console.log("connection successful");
+    }
+</script>
+
+</body>
+</html>
+
