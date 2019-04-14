@@ -25,4 +25,14 @@ public class FlightDashboardController {
                 -> ok().contentType(MediaType.TEXT_HTML).syncBody(html)
         );
     }
+
+    @Bean
+    public RouterFunction<ServerResponse> cssRouter(
+            @Value("classpath:/static/style.css")
+                    Resource css) {
+
+        return route(GET("/style"), request
+                -> ok().syncBody(css)
+        );
+    }
 }

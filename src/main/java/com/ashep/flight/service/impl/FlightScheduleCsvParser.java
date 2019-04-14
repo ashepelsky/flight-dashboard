@@ -10,13 +10,14 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.logging.Logger;
 
 import com.ashep.flight.model.FlightScheduleRow;
 import com.ashep.flight.service.FlightScheduleParserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 @Service
+@Slf4j
 public class FlightScheduleCsvParser implements FlightScheduleParserService {
 
     @Override
@@ -38,12 +39,10 @@ public class FlightScheduleCsvParser implements FlightScheduleParserService {
             }
 
         } catch (IOException e) {
-            Logger.getLogger(this.getClass().getSimpleName())
-                  .severe("IO exception while parsing CVS file. error: " + e.getMessage());
+            log.error("IO exception while parsing CVS file. error: " + e.getMessage());
             throw new RuntimeException(e);
         } catch (Exception e) {
-            Logger.getLogger(this.getClass().getSimpleName())
-                  .severe("Failed to parse CVS file. error: " + e.getMessage());
+            log.error("Failed to parse CVS file. error: " + e.getMessage());
             throw new IllegalArgumentException("Invalid CVS file");
         }
 

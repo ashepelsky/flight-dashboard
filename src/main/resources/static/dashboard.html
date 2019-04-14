@@ -1,21 +1,57 @@
 <!DOCTYPE html>
 <html>
+<head>
+    <link rel="stylesheet" href="style">
+</head>
 <body>
 
-<h1>Flighs Dashboard</h1>
-<div id="result"></div>
+<h1>Flights Dashboard</h1>
+<div id="dashboard">
+</div>
 
 <script>
-    if(typeof(EventSource) !== "undefined") {
-        var source = new EventSource("flight");
-        source.onmessage = function(event) {
-            document.getElementById("result").innerHTML = event.data + "<br>";
+    if (typeof(EventSource) !== "undefined") {
+        const source = new EventSource("flight");
+
+        source.onmessage = function (event) {
+            const table = document.createElement('table');
+
+            const flights = JSON.parse(event.data);
+            console.log(flights);
+
+            if(flights.length){
+                const row = document.createElement('tr');
+
+                for( let header in flights[0]){
+                    const elem = document.createElement('th');
+                    elem.appendChild(document.createTextNode(header));
+                    row.appendChild(elem);
+                }
+                table.appendChild(row);
+
+                flights.forEach(flight=>{
+                    const row = document.createElement('tr');
+
+                    for( let item in flight){
+                        const elem = document.createElement('td');
+                        elem.appendChild(document.createTextNode(flight[item]));
+                        row.appendChild(elem);
+                    }
+
+                    table.appendChild(row);
+                });
+            }else{
+                document.getElementById("dashboard").innerHTML = "<h1>No flights available</h1>";
+            }
+
+            document.getElementById('dashboard').innerHTML = '';
+            document.getElementById("dashboard").appendChild(table);
         };
     } else {
-        document.getElementById("result").innerHTML = "Sorry, your browser does not support server-sent events...";
+        document.getElementById("dashboard").innerHTML = "Sorry, your browser does not support server-sent events...";
     }
 
-    source.onopen = function(event) {
+    source.onopen = function (event) {
         console.log("connection successful");
     }
 </script>

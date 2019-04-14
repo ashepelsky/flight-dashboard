@@ -15,7 +15,6 @@ import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -44,7 +43,7 @@ public class FlightController {
     @GetMapping
     public Flux<List<FlightInfoDto>> test() {
 
-        Flux<Long> interval = Flux.interval(Duration.ofSeconds(1));
+        Flux<Long> interval = Flux.interval(Duration.ZERO, Duration.ofSeconds(10));
 
         Flux<List<FlightInfoDto>> stockTransactionFlux =
                 Flux.fromStream(Stream.generate(flightManager::getClosestFlights));
@@ -70,6 +69,7 @@ public class FlightController {
         @Data
         @AllArgsConstructor
         class ErrorResponse {
+
             private String error;
         }
 
@@ -79,7 +79,8 @@ public class FlightController {
         }
 
         log.debug("Unhandled server error: {}", e.getMessage());
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorResponse("Unhandled server error."));
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                             .body(new ErrorResponse("Unhandled server error."));
 
     }
 
