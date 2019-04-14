@@ -15,8 +15,6 @@ public class FlightInfoDto {
 
     private final String flightNo;
 
-    private final FlightStatusEnum status;
-
     public FlightInfoDto(LocalTime departureTime,
                          String destination,
                          String destinationAirport,
@@ -26,7 +24,6 @@ public class FlightInfoDto {
         this.destination = destination;
         this.destinationAirport = destinationAirport;
         this.flightNo = flightNo;
-        status = FlightStatusEnum.getStatusFromTime(departureTime);
     }
 
     public static FlightInfoDto fromRow(FlightScheduleRow flightScheduleRow) {
@@ -35,5 +32,9 @@ public class FlightInfoDto {
                                  flightScheduleRow.getDestination(),
                                  flightScheduleRow.getDestinationAirport(),
                                  flightScheduleRow.getFlightNo());
+    }
+
+    public FlightStatusEnum getStatus() {
+        return FlightStatusEnum.getStatusFromTime(departureTime);
     }
 }

@@ -15,6 +15,7 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 
 import com.ashep.flight.model.FlightInfoDto;
+import com.ashep.flight.model.FlightInfoListDto;
 import com.ashep.flight.model.FlightScheduleRow;
 import com.ashep.flight.service.FlightManagerService;
 import com.ashep.flight.service.FlightScheduleParserService;
@@ -40,7 +41,7 @@ public class FlightManagerServiceImpl implements FlightManagerService {
     }
 
     @Override
-    public List<FlightInfoDto> getFlights(final LocalTime start, final LocalTime end, final DayOfWeek dayOfWeek) {
+    public List<FlightInfoListDto> getFlights(final LocalTime start, final LocalTime end, final DayOfWeek dayOfWeek) {
 
         return Optional.ofNullable(storage.getFlights())
                        .map(allFlights -> allFlights.get(dayOfWeek))
@@ -52,16 +53,18 @@ public class FlightManagerServiceImpl implements FlightManagerService {
     }
 
     @Override
-    public Map<DayOfWeek, SortedMap<LocalTime, FlightInfoDto>> storeSchedule(
+    public Map<DayOfWeek, SortedMap<LocalTime, FlightInfoListDto>> storeSchedule(
             final List<FlightScheduleRow> rawSchedule) {
 
-        Map<DayOfWeek, SortedMap<LocalTime, FlightInfoDto>> allFlights = new HashMap<>();
+        Map<DayOfWeek, SortedMap<LocalTime, FlightInfoListDto>> allFlights = new HashMap<>();
 
         rawSchedule.forEach(raw -> {
             final FlightInfoDto flightInfoDto = FlightInfoDto.fromRow(raw);
 
             raw.getDays().forEach(day -> allFlights.computeIfAbsent(day, ignore -> new TreeMap<>())
-                                                   .put(raw.getDepartureTime(), flightInfoDto));
+                                                   .computeIfAbsent(raw.getDepartureTime(), FlightInfoListDto::new)
+                                                   .getInfoDtos()
+                                                   .add(flightInfoDto));
         });
 
         storage.saveFlights(allFlights);

@@ -11,23 +11,15 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 
 import com.ashep.flight.model.FlightInfoDto;
-import com.ashep.flight.model.FlightScheduleRow;
+import com.ashep.flight.model.FlightInfoListDto;
 import com.ashep.flight.model.FlightStatusEnum;
 import com.ashep.flight.service.impl.FlightInMemoryStorage;
-import com.ashep.flight.service.impl.FlightManagerServiceImpl;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.mockito.ArgumentMatchers.anyMap;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class FlightInMemoryStorageTest {
@@ -46,15 +38,17 @@ public class FlightInMemoryStorageTest {
     @Test
     public void saveAndGet() {
 
-        final Map<DayOfWeek, SortedMap<LocalTime, FlightInfoDto>> given = getScheduleMap();
+        final Map<DayOfWeek, SortedMap<LocalTime, FlightInfoListDto>> given = getScheduleMap();
 
         storage.saveFlights(given);
 
-        final Map<DayOfWeek, SortedMap<LocalTime, FlightInfoDto>> result = storage.getFlights();
+        final Map<DayOfWeek, SortedMap<LocalTime, FlightInfoListDto>> result = storage.getFlights();
 
         assertEquals("Maps for input and output should be the same object", given, result);
 
-        FlightInfoDto flightInfoDto = result.get(DayOfWeek.MONDAY).get(DEPARTURE_TIME);
+        FlightInfoListDto flightInfoList = result.get(DayOfWeek.MONDAY).get(DEPARTURE_TIME);
+
+        FlightInfoDto flightInfoDto = flightInfoList.getInfoDtos().get(0);
 
         assertEquals(DEPARTURE_TIME, flightInfoDto.getDepartureTime());
         assertEquals(DESTINATION, flightInfoDto.getDestination());
@@ -64,19 +58,22 @@ public class FlightInMemoryStorageTest {
 
     }
 
-    public static Map<DayOfWeek, SortedMap<LocalTime, FlightInfoDto>> getScheduleMap() {
+    public static Map<DayOfWeek, SortedMap<LocalTime, FlightInfoListDto>> getScheduleMap() {
 
         List<FlightInfoDto> list = new ArrayList<>();
 
-        Map<DayOfWeek, SortedMap<LocalTime, FlightInfoDto>> map = new HashMap<>();
+        Map<DayOfWeek, SortedMap<LocalTime, FlightInfoListDto>> map = new HashMap<>();
 
-        SortedMap<LocalTime, FlightInfoDto> sortedMap = new TreeMap<>();
+        SortedMap<LocalTime, FlightInfoListDto> sortedMap = new TreeMap<>();
 
         for (int i = 0; i < 5; i++) {
             final FlightInfoDto infoDto =
                     new FlightInfoDto(DEPARTURE_TIME.plusHours(i), DESTINATION, AIRPORT, "no " + i);
 
-            sortedMap.put(infoDto.getDepartureTime(), infoDto);
+            FlightInfoListDto flightInfoList = new FlightInfoListDto(infoDto.getDepartureTime());
+            flightInfoList.getInfoDtos().add(infoDto);
+
+            sortedMap.put(infoDto.getDepartureTime(), flightInfoList);
 
         }
 

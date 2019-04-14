@@ -17,28 +17,32 @@
             const table = document.createElement('table');
 
             const flights = JSON.parse(event.data);
-            console.log(flights);
+
 
             if(flights.length){
                 const row = document.createElement('tr');
 
-                for( let header in flights[0]){
+                for( let header in flights[0].infoDtos[0]){
                     const elem = document.createElement('th');
                     elem.appendChild(document.createTextNode(header));
                     row.appendChild(elem);
                 }
                 table.appendChild(row);
 
-                flights.forEach(flight=>{
-                    const row = document.createElement('tr');
+                flights.forEach(flightsList=>{
 
-                    for( let item in flight){
-                        const elem = document.createElement('td');
-                        elem.appendChild(document.createTextNode(flight[item]));
-                        row.appendChild(elem);
-                    }
+                    flightsList.infoDtos.forEach(flight=> {
+                        const row = document.createElement('tr');
 
-                    table.appendChild(row);
+                        for( let item in flight){
+                            const elem = document.createElement('td');
+                            elem.appendChild(document.createTextNode(flight[item]));
+                            row.appendChild(elem);
+                            table.appendChild(row);
+                        }
+                    });
+
+
                 });
             }else{
                 document.getElementById("dashboard").innerHTML = "<h1>No flights available</h1>";

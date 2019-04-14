@@ -8,15 +8,16 @@ import java.util.Map;
 import java.util.SortedMap;
 
 import com.ashep.flight.model.FlightInfoDto;
+import com.ashep.flight.model.FlightInfoListDto;
 import com.ashep.flight.model.FlightScheduleRow;
 
 public interface FlightManagerService {
 
-    List<FlightInfoDto> getFlights(LocalTime start, LocalTime end, DayOfWeek dayOfWeek);
+    List<FlightInfoListDto> getFlights(LocalTime start, LocalTime end, DayOfWeek dayOfWeek);
 
-    Map<DayOfWeek, SortedMap<LocalTime, FlightInfoDto>> storeSchedule(List<FlightScheduleRow> rawSchedule);
+    Map<DayOfWeek, SortedMap<LocalTime, FlightInfoListDto>> storeSchedule(List<FlightScheduleRow> rawSchedule);
 
-    default List<FlightInfoDto> getClosestFlights() {
+    default List<FlightInfoListDto> getClosestFlights() {
 
         LocalTime start;
         LocalTime end;

@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import com.ashep.flight.model.FlightInfoDto;
+import com.ashep.flight.model.FlightInfoListDto;
 import com.ashep.flight.model.FlightScheduleRow;
 import com.ashep.flight.service.FlightManagerService;
 import com.ashep.flight.service.FlightScheduleParserService;
@@ -41,11 +42,11 @@ public class FlightController {
     }
 
     @GetMapping
-    public Flux<List<FlightInfoDto>> test() {
+    public Flux<List<FlightInfoListDto>> test() {
 
         Flux<Long> interval = Flux.interval(Duration.ZERO, Duration.ofSeconds(10));
 
-        Flux<List<FlightInfoDto>> stockTransactionFlux =
+        Flux<List<FlightInfoListDto>> stockTransactionFlux =
                 Flux.fromStream(Stream.generate(flightManager::getClosestFlights));
         return Flux.zip(interval, stockTransactionFlux).map(Tuple2::getT2);
     }

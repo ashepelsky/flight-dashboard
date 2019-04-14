@@ -4,13 +4,12 @@ import java.time.DayOfWeek;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.SortedMap;
-import java.util.TreeMap;
 
 import com.ashep.flight.model.FlightInfoDto;
+import com.ashep.flight.model.FlightInfoListDto;
 import com.ashep.flight.model.FlightScheduleRow;
 import com.ashep.flight.model.FlightStatusEnum;
 import com.ashep.flight.service.impl.FlightManagerServiceImpl;
@@ -49,21 +48,23 @@ public class FlightManagerServiceTest {
     @Test
     public void singeRowSuccessfullyStored() {
 
-        final Map<DayOfWeek, SortedMap<LocalTime, FlightInfoDto>> resultMap =
+        final Map<DayOfWeek, SortedMap<LocalTime, FlightInfoListDto>> resultMap =
                 flightManagerService.storeSchedule(Collections.singletonList(getSimpleFlightScheduleRow()));
 
         assertNotNull("Schedule map can not be null", resultMap);
         assertFalse("Schedule map can not be empty", resultMap.isEmpty());
 
-        SortedMap<LocalTime, FlightInfoDto> resultSet = resultMap.get(DayOfWeek.MONDAY);
+        SortedMap<LocalTime, FlightInfoListDto> resultSet = resultMap.get(DayOfWeek.MONDAY);
 
         assertNotNull("Schedule set can not be null", resultSet);
 
-        FlightInfoDto result = resultSet.entrySet()
-                                        .stream()
-                                        .findAny()
-                                        .orElseThrow(() -> new RuntimeException("missing flight info"))
-                                        .getValue();
+        FlightInfoListDto resultList = resultSet.entrySet()
+                                                .stream()
+                                                .findAny()
+                                                .orElseThrow(() -> new RuntimeException("missing flight info"))
+                                                .getValue();
+
+        final FlightInfoDto result = resultList.getInfoDtos().get(0);
 
         assertNotNull("Schedule row can not be null", result);
 
@@ -80,13 +81,13 @@ public class FlightManagerServiceTest {
     @Test
     public void multipleRowsSuccessfullyStored() {
 
-        final Map<DayOfWeek, SortedMap<LocalTime, FlightInfoDto>> resultMap =
+        final Map<DayOfWeek, SortedMap<LocalTime, FlightInfoListDto>> resultMap =
                 flightManagerService.storeSchedule(getScheduleList());
 
         assertNotNull("Schedule map can not be null", resultMap);
         assertFalse("Schedule map can not be empty", resultMap.isEmpty());
 
-        SortedMap<LocalTime, FlightInfoDto> resultSet = resultMap.get(DayOfWeek.MONDAY);
+        SortedMap<LocalTime, FlightInfoListDto> resultSet = resultMap.get(DayOfWeek.MONDAY);
 
         assertEquals("Invalid count of rows", 5, resultSet.size());
 
@@ -99,16 +100,17 @@ public class FlightManagerServiceTest {
 
         when(storage.getFlights()).thenReturn(getScheduleMap());
 
-        final List<FlightInfoDto> result = flightManagerService.getFlights(DEPARTURE_TIME.minusHours(1),
-                                                                            DEPARTURE_TIME.plusHours(1).plusMinutes(1),
-                                                                            DayOfWeek.MONDAY);
+        final List<FlightInfoListDto> result = flightManagerService.getFlights(DEPARTURE_TIME.minusHours(1),
+                                                                               DEPARTURE_TIME.plusHours(1)
+                                                                                             .plusMinutes(1),
+                                                                               DayOfWeek.MONDAY);
 
         assertNotNull("Schedule map can not be null", result);
 
         assertEquals("Two flights should be selected per time condition", 2, result.size());
 
-        assertEquals("no 0", result.get(0).getFlightNo());
-        assertEquals("no 1", result.get(1).getFlightNo());
+        assertEquals("no 0", result.get(0).getInfoDtos().get(0).getFlightNo());
+        assertEquals("no 1", result.get(1).getInfoDtos().get(0).getFlightNo());
     }
 
     private static FlightScheduleRow getSimpleFlightScheduleRow() {

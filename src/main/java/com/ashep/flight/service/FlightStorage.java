@@ -6,11 +6,12 @@ import java.util.Map;
 import java.util.SortedMap;
 
 import com.ashep.flight.model.FlightInfoDto;
+import com.ashep.flight.model.FlightInfoListDto;
 
 public interface FlightStorage {
 
-    Map<DayOfWeek, SortedMap<LocalTime, FlightInfoDto>> getFlights();
+    Map<DayOfWeek, SortedMap<LocalTime, FlightInfoListDto>> getFlights();
 
-    void saveFlights(Map<DayOfWeek, SortedMap<LocalTime, FlightInfoDto>> flights);
+    void saveFlights(Map<DayOfWeek, SortedMap<LocalTime, FlightInfoListDto>> flights);
 
 }
